@@ -48,23 +48,16 @@ kubeshop/
 
 ## 🛠️ Setup & Run Locally
 
-1. Clone the repo:  
-   ``bash
+1. Clone the repo: bash
    git clone https://github.com/<your-username>/kubeshop.git
    cd kubeshop
 
-2. Run with Docker Compose (local dev):
-
-   ``bash
+2. Run with Docker Compose (local dev):bash
    docker-compose up --build
-   ```
 
-3. Run on Kubernetes (Minikube example):
-
-   ``bash
+3. Run on Kubernetes (Minikube example):bash
    kubectl apply -f k8s-manifests/
    minikube service frontend-service
-   ```
    
 ## 🌐 CI/CD Flow
 
