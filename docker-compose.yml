@@ -1,0 +1,47 @@
+version: '3.8'
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - product-service
+      - auth-service
+
+  product-service:
+    build: ./product-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongodb
+
+  cart-service:
+    build: ./cart-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - postgres
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - postgres
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "3004:3004"
+
+  mongodb:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
