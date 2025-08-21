@@ -1,3 +1,4 @@
+name: ecommerce
 version: '3.8'
 services:
   frontend:
