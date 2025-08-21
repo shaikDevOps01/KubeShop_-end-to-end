@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker.io
+        sudo systemctl start docker
+        
+    - name: Build all services
+      run: |
+        docker-compose build
+        echo "✅ All Docker images built successfully!"
+        
+    - name: List built images
+      run: |
+        docker images
+        
+    - name: Test services
+      run: |
+        # Start services in background
+        docker-compose up -d
+        
+        # Wait for services to start
+        sleep 10
+        
+        # Test product service
+        curl -f http://localhost:3001/products || exit 1
+        
+        # Test cart service
+        curl -f http://localhost:3002/cart || exit 1
+        
+        echo "✅ All services tested successfully!"
+        
+    - name: Cleanup
+      run: |
+        docker-compose down
