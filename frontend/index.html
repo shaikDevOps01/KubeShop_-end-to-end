@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Kubeshop — Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; padding:24px; background:#f7fafc; }
+    .card{ background:white; padding:18px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.06); max-width:800px; margin:20px auto; }
+    button{ padding:8px 14px; border-radius:6px; border:none; cursor:pointer; background:#2563eb; color:white; }
+    pre{ background:#0f172a; color:#e6eef8; padding:12px; border-radius:6px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Kubeshop — E-commerce Demo</h1>
+    <p>Minimal frontend used to demo your microservices. Click the buttons to call the backend endpoints.</p>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <button onclick="callApi('/product')">Get Products</button>
+      <button onclick="callApi('/cart')">Get Cart</button>
+      <button onclick="callApi('/order')">Get Orders</button>
+      <button onclick="callApi('/auth')">Auth Health</button>
+    </div>
+
+    <div id="out"><pre>Output will appear here...</pre></div>
+  </div>
+
+  <script>
+    const OUT = document.getElementById('out');
+    // By default the frontend will try same-origin /api/<service> - Ingress will route /api/*
+    async function callApi(path){
+      OUT.innerHTML = '<pre>Loading '+path+' …</pre>';
+      try{
+        const res = await fetch('/api'+path);
+        const text = await (res.ok ? res.text() : res.text().then(t=>`ERROR ${res.status}: ${t}`));
+        OUT.innerHTML = '<pre>' + text + '</pre>';
+      }catch(e){
+        OUT.innerHTML = '<pre>Fetch error: '+e.message+'</pre>';
+      }
+    }
+  </script>
+</body>
+</html>
